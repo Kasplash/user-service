@@ -51,14 +51,10 @@ jobs:
       - name: Update kubeconfig
         run: aws eks update-kubeconfig --name ${{ secrets.EKS_CLUSTER_NAME }} --region ${{ secrets.AWS_REGION }}
 
-      - name: Ensure namespace exists
-        run: kubectl create namespace my-namespace --dry-run=client -o yaml | kubectl apply -f -
-
       - name: Update Kubernetes secret
         run: |
           kubectl create secret generic app-secrets \
             --from-literal=ADMIN_PASSWORD="${{ secrets.ADMIN_PASSWORD }}" \
-            --namespace my-namespace \
             --dry-run=client -o yaml | kubectl apply -f - 
 
       - name: Deploy to EKS
