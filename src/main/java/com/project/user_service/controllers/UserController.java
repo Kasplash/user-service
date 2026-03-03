@@ -4,8 +4,8 @@ package com.project.user_service.controllers;
 import com.project.user_service.exeptions.UserAlreadyExistsExeption;
 import com.project.user_service.exeptions.UserIdIsNull;
 import com.project.user_service.exeptions.UserNotExistsException;
-import com.project.user_service.models.entities.Person;
-import com.project.user_service.models.requests.PersonRequest;
+import com.project.user_service.models.entities.User;
+import com.project.user_service.models.requests.UserRequestDTO;
 
 import com.project.user_service.services.UserService;
 import jakarta.validation.Valid;
@@ -24,12 +24,12 @@ public class UserController {
     UserService userService;
 
     @PostMapping
-    public Person createPerson(@Valid @RequestBody PersonRequest person) {
+    public User createPerson(@Valid @RequestBody UserRequestDTO person) {
         return userService.save(person);
     }
 
     @GetMapping
-    public Optional<Person> getPerson(@RequestParam long ssn) {
+    public Optional<User> getPerson(@RequestParam long ssn) {
         return userService.get(ssn);
     }
 
@@ -39,7 +39,7 @@ public class UserController {
     }
 
     @PatchMapping
-    public ResponseEntity<String> updatePerson(@Valid @RequestBody PersonRequest person){
+    public ResponseEntity<String> updatePerson(@Valid @RequestBody UserRequestDTO person){
         int updatedEntries = userService.updatePerson(person);
         return new ResponseEntity<>("Updated entries: " + updatedEntries, HttpStatus.CREATED);
     }

@@ -1,10 +1,9 @@
 package com.project.user_service.services;
 
 import com.project.user_service.repositories.UserRepository;
-import com.project.user_service.exeptions.UserAlreadyExistsExeption;
 import com.project.user_service.exeptions.UserNotExistsException;
-import com.project.user_service.models.entities.Person;
-import com.project.user_service.models.requests.PersonRequest;
+import com.project.user_service.models.entities.User;
+import com.project.user_service.models.requests.UserRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,22 +14,24 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    public Person save(PersonRequest personRequest) {
-        long ssn = personRequest.ssn();
-        String name = personRequest.name();
-        String address = personRequest.address();
-        int age = personRequest.age();
+    public User save(UserRequestDTO userRequestDTO) {
+        long ssn = userRequestDTO.ssn();
+        String name = userRequestDTO.name();
+        String address = userRequestDTO.address();
+        int age = userRequestDTO.age();
 
-        Person personEntity = new Person(ssn, name, address, age);
-
+        User userEntity = new User(ssn, name, address, age);
+/*
         if(userRepository.existsById(ssn)){
             throw new UserAlreadyExistsExeption("User already exists");
         }
-        return userRepository.save(personEntity);
+
+ */
+        return userRepository.save(userEntity);
     }
 
-    public Optional<Person> get(long ssn) {
-        Optional<Person> result = userRepository.findById(ssn);
+    public Optional<User> get(long ssn) {
+        Optional<User> result = userRepository.findById(ssn);
         if(result.isEmpty()){
             throw new UserNotExistsException("No user found");
         }
@@ -41,10 +42,10 @@ public class UserService {
         if(!userRepository.existsById(ssn)) {
             throw new UserNotExistsException("No user to delete");
         }
-        userRepository.deleteById(ssn);
+        userRepository.deleteById(ssn); // function returns void so might be misleading
     }
 
-    public int updatePerson(PersonRequest person){
+    public int updatePerson(UserRequestDTO person){
         long ssn = person.ssn();
         String address = person.address();
         String name = person.name();

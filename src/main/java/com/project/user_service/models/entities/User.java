@@ -3,19 +3,22 @@ package com.project.user_service.models.entities;
 import com.project.user_service.exeptions.UserIdIsNull;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
-public class Person {
+@Table(name = "_user")
+public class
+User {
     @Id
     long ssn;
     String name;
     String address;
     int age;
 
-    public Person() {
+    public User() {
     }
 
-    public Person(long ssn, String name, String address, int age) {
+    public User(long ssn, String name, String address, int age) {
         validate(ssn);
         setSsn(ssn);
         setName(name);
