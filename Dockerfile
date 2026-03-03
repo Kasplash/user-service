@@ -1,38 +1,26 @@
-# ============================
-# 1. Build stage
-# ============================
-FROM gradle:8.7-jdk17 AS builder
-
-# Set working directory
+# Stage 1: build
+FROM eclipse-temurin:17-jdk as build
 WORKDIR /app
 
-# Copy Gradle wrapper and build files first (for better caching)
-COPY ../../user-service-main/gradlew ./
-COPY ../../user-service-main/gradle ./gradle
-COPY ../../user-service-main/build.gradle settings.gradle ./
+# Copy Gradle wrapper and build files first to cache dependencies
+COPY gradle gradle
+COPY gradlew .
+COPY build.gradle .
+COPY settings.gradle .
+RUN chmod +x ./gradlew
 
-# Download dependencies (cached)
-RUN ./gradlew dependencies --no-daemon
+# Copy source code
+COPY src src
 
-# Copy the rest of the source code
-COPY ../../user-service-main/src ./src
+# Build the jar
+RUN ./gradlew clean bootJar -x test
 
-# Build the application (creates a fat JAR under build/libs)
-RUN ./gradlew bootJar --no-daemon
-
-# ============================
-# 2. Runtime stage
-# ============================
-FROM eclipse-temurin:17-jdk-jammy
-
-# Set working directory
+# Stage 2: runtime
+FROM eclipse-temurin:17-jre
 WORKDIR /app
 
-# Copy the built JAR from the builder stage
-COPY --from=builder /app/build/libs/*.jar app.jar
+# Copy the built jar to the runtime image
+COPY --from=build /app/build/libs/*.jar app.jar
 
-# Expose the default Spring Boot port
 EXPOSE 8080
-
-# Run the application
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java","-jar","app.jar"]
