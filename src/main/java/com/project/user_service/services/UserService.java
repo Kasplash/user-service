@@ -1,5 +1,6 @@
 package com.project.user_service.services;
 
+import com.project.user_service.exeptions.UserAlreadyExistsExeption;
 import com.project.user_service.repositories.UserRepository;
 import com.project.user_service.exeptions.UserNotExistsException;
 import com.project.user_service.models.entities.User;
@@ -21,12 +22,11 @@ public class UserService {
         int age = userRequestDTO.age();
 
         User userEntity = new User(ssn, name, address, age);
-/*
+
         if(userRepository.existsById(ssn)){
             throw new UserAlreadyExistsExeption("User already exists");
         }
 
- */
         return userRepository.save(userEntity);
     }
 
