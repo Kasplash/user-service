@@ -7,15 +7,15 @@ FROM gradle:8.7-jdk17 AS builder
 WORKDIR /app
 
 # Copy Gradle wrapper and build files first (for better caching)
-COPY ../../User-Service-main/gradlew ./
-COPY ../../User-Service-main/gradle ./gradle
-COPY ../../User-Service-main/build.gradle settings.gradle ./
+COPY ../../user-service-main/gradlew ./
+COPY ../../user-service-main/gradle ./gradle
+COPY ../../user-service-main/build.gradle settings.gradle ./
 
 # Download dependencies (cached)
 RUN ./gradlew dependencies --no-daemon
 
 # Copy the rest of the source code
-COPY ../../User-Service-main/src ./src
+COPY ../../user-service-main/src ./src
 
 # Build the application (creates a fat JAR under build/libs)
 RUN ./gradlew bootJar --no-daemon
