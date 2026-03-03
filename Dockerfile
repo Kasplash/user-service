@@ -1,5 +1,5 @@
 # Stage 1: build
-FROM eclipse-temurin:17-jdk as build
+FROM eclipse-temurin:17-jdk AS build
 WORKDIR /app
 
 # Copy Gradle wrapper and build files first to cache dependencies
