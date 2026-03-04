@@ -55,10 +55,7 @@ jobs:
         run: |
           kubectl create secret generic app-secrets \
             --from-literal=ADMIN_PASSWORD="${{ secrets.ADMIN_PASSWORD }}" \
-            --dry-run=client -o yaml | kubectl apply -f - 
-      - name: Delete old deployment
-        run: |
-          kubectl delete -f k8s/deployment.yaml
+            --dry-run=client -o yaml | kubectl apply -f -
       - name: Deploy to EKS
         run: |
           kubectl apply -f k8s/deployment.yaml
