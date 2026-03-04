@@ -60,3 +60,6 @@ jobs:
         run: |
           kubectl apply -f k8s/deployment.yaml
           kubectl apply -f k8s/service.yaml
+
+      - name: Rollback deployment
+        run: kubectl rollout undo deployment user-service
